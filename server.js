@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 // require("dotenv").config();
 // Requiring our models for syncing
-const db = require("./models");
+const exer = require("./models/user_data");
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -45,8 +45,8 @@ app.set("view engine", "handlebars");
 
 // Routes -- ROUTES MUST COME AFTER MIDDLEWARE AND HANDLEBARS
 // =============================================================
-// const userRoutes = require("./controllers/userController");
-// app.use(userRoutes);
+const userRoutes = require("./controllers/userController");
+app.use(userRoutes);
 
 // const frontEndRoutes = require("./controllers/frontEndController");
 // app.use(frontEndRoutes);
@@ -59,8 +59,8 @@ app.set("view engine", "handlebars");
 
 // Syncing our sequelize models and then starting our Express app
 // =============================================================
-db.sequelize.sync({ force: false }).then(function () {
-  app.listen(PORT, function () {
-    console.log("App listening on PORT " + PORT);
-  });
+// db.sequelize.sync({ force: false }).then(function () {
+app.listen(PORT, function () {
+  console.log("App listening on PORT " + PORT);
 });
+// });
