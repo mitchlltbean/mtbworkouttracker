@@ -9,15 +9,33 @@
 
             <h1 class="defaultH1">Workout Time</h1>
             <form action="/action_page.php">
-                <label for="fname">First name:</label>
-                <input type="text" id="fname" name="fname"><br><br>
-                <label for="lname">Last name:</label>
-                <input type="text" id="lname" name="lname"><br><br>
+                <label for="title">workout Title:</label>
+                <input type="text" id="title" name="title"><br><br>
+                <label for="exername">Exercise name:</label>
+                <input type="text" id="exername" name="exername"><br><br>
+                <label for="type">Type:</label>
+                <input type="text" id="type" name="type"><br><br>
+                <label for="weight">weight:</label>
+                <input type="text" id="weight" name="weight"><br><br>
+                <label for="sets">sets:</label>
+                <input type="text" id="sets" name="sets"><br><br>
+                <label for="reps">reps:</label>
+                <input type="text" id="reps" name="reps"><br><br>
+                <label for="dur">duration in min:</label>
+                <input type="text" id="dur" name="dur"><br><br>
                 <input type="submit" value="Submit">
             </form>
 
+
+
+
+
+
+            {{json this}}
+            {{#each this}}
             <p>
-                {{#each exer}}
+
+                {{#each exers}}
 
             <p>{{name}}</p>
             <p>{{type}}</p>
@@ -28,7 +46,7 @@
 
             {{/each}}
             </p>
-
+            {{/each}}
 
 
         </div>

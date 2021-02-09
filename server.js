@@ -1,11 +1,6 @@
-// *****************************************************************************
-// Server.js - This file is the initial starting point for the Node/Express server.
-//
-// ******************************************************************************
 // *** Dependencies
 // =============================================================
 const express = require("express");
-// const session = require("express-session");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 // Sets up the Express App
@@ -26,18 +21,6 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
   useUnifiedTopology: true,
 });
 
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//       maxAge: 1000 * 60 * 60 * 2,
-//     },
-//   })
-// );
-
 // Static directory
 app.use(express.static("public"));
 
@@ -45,7 +28,17 @@ app.use(express.static("public"));
 
 // Set Handlebars.
 const exphbs = require("express-handlebars");
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine(
+  "handlebars",
+  exphbs({
+    defaultLayout: "main",
+    helpers: {
+      json: function (context) {
+        return JSON.stringify(context, null, 4);
+      },
+    },
+  })
+);
 app.set("view engine", "handlebars");
 
 // =============================================================
@@ -54,15 +47,6 @@ app.set("view engine", "handlebars");
 // =============================================================
 const userRoutes = require("./controllers/userController");
 app.use(userRoutes);
-
-// const frontEndRoutes = require("./controllers/frontEndController");
-// app.use(frontEndRoutes);
-
-// const followingRoutes = require("./controllers/followingController");
-// app.use(followingRoutes);
-
-// const searchRoutes = require("./controllers/searchController");
-// app.use(searchRoutes);
 
 // Syncing our sequelize models and then starting our Express app
 // =============================================================

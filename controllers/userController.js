@@ -11,17 +11,23 @@ router.get("/", (req, res) => {
 //workouts routes=============
 
 //get all workouts
-router.get("/api/workouts", (req, res) => {
-  db.workout.find({}).then((dbWorkouts) => {
-    res.json(dbWorkouts);
-  });
+router.get("/getworkouts", (req, res) => {
+  db.workout
+    .find({})
+    .populate("exers")
+    .lean()
+    .then((dbWorkouts) => {
+      console.log(dbWorkouts);
+      res.render("index", dbWorkouts);
+    });
 });
 
 //post new workout
-router.post("/api/workouts", ({ body }, res) => {
+router.post("/createworkouts", ({ body }, res) => {
   db.workout
     .create(body)
     .then((dbWorkout) => {
+      console.log(dbWorkout, "@@@@@@@@@@@@@");
       res.json(dbWorkout);
     })
     .catch((err) => {
