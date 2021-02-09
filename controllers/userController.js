@@ -1,9 +1,69 @@
 const express = require("express");
 const router = express.Router();
-const exer = require("../models/user_data");
+const db = require("../models");
 
-router.get("/", function (req, res) {
-  res.render("index", exer);
+// home route
+router.get("/", (req, res) => {
+  res.send("hello");
+  // res.send("index")
+});
+
+//workouts routes=============
+
+//get all workouts
+router.get("/api/workouts", (req, res) => {
+  db.workout.find({}).then((dbWorkouts) => {
+    res.json(dbWorkouts);
+  });
+});
+
+//post new workout
+router.post("/api/workouts", ({ body }, res) => {
+  db.workout
+    .create(body)
+    .then((dbWorkout) => {
+      res.json(dbWorkout);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send(err);
+    });
+});
+
+// exercise routes
+router.get("/api/exer", (req, res) => {
+  db.exer.find({}).then((dbExer) => {
+    res.json(dbExer);
+  });
+});
+
+router.get("/populatedexer", (req, res) => {
+  db.workout
+    .find({})
+    .populate("exers")
+    .then((dbPopExer) => {
+      console.log(dbPopExer, "!!!!!!!!!!!!!!!");
+      res.send(dbPopExer);
+    });
+});
+
+// route for updating a workout with a new exercise
+router.post("/api/exer", (req, res) => {
+  db.exer
+    .create(req.body)
+    .then((exercise) => {
+      console.log(exercise, "!!!!!!!!!!");
+      db.workout
+        .findOneAndUpdate(
+          { _id: req.body.id },
+          { $push: { exers: exercise._id } }
+        )
+        .then((dbFullwork) => {
+          console.log(dbFullwork, "!!!!!!!!!!!!!!!");
+          res.send(dbFullwork);
+        });
+    })
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;

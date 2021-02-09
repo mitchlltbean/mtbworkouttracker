@@ -6,18 +6,25 @@
 // =============================================================
 const express = require("express");
 // const session = require("express-session");
-
+const logger = require("morgan");
+const mongoose = require("mongoose");
 // Sets up the Express App
 // =============================================================
 const app = express();
 const PORT = process.env.PORT || 8080;
+app.use(logger("dev"));
 // require("dotenv").config();
 // Requiring our models for syncing
-const exer = require("./models/user_data");
+const db = require("./models");
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+  useNewUrlParser: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+});
 
 // app.use(
 //   session({
